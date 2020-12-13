@@ -18,7 +18,12 @@
         <v-card-text>
           <v-container>
             <v-form ref="form">
-              <v-text-field
+              <div v-for="field in formFields" :key="field.id"> 
+                <v-text-field
+                  :label = "field.id"
+                ></v-text-field>
+              </div>
+            <!--  <v-text-field
                 class="mt-n2"
                 label="Name*"
                 color="primary"
@@ -71,6 +76,7 @@
                 required
                 :rules="[passwordConfirmationRule]"
               ></v-text-field>
+              -->
             </v-form>
           </v-container>
         </v-card-text>
@@ -85,6 +91,7 @@
 </template>
 
 <script>
+import Axios from 'axios';
 import RegistrationIcon from 'vue-material-design-icons/AccountCircle.vue'
 import CloseIcon from 'vue-material-design-icons/CloseCircle.vue'
 export default {
@@ -110,7 +117,9 @@ export default {
     emailRules: [
       v => !!v || "This field is required",
       v => /.+@.+\..+/.test(v) || "E-mail must be valid"
-    ]
+    ],
+    formFields: [],
+    processInstance:{},
   }),
   computed: {
     passwordConfirmationRule() {
@@ -130,7 +139,21 @@ export default {
     close() {
       this.RegisterDialog = false;
       this.$refs.form.reset();
+    },
+    generateRegistrationForm(){
+      Axios
+      .get("http://localhost:8080/registrationForm")
+      .then(response => {
+          this.formFields = response.data.formFields;
+          this.processInstance = response.data.processInstanceId;
+        })  
+      .catch(error => {
+          console.log(error)
+        })
     }
+  },
+  mounted(){
+    this.generateRegistrationForm()
   }
 };
 </script>
