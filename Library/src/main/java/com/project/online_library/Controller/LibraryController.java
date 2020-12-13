@@ -15,7 +15,7 @@ public class LibraryController {
     @GetMapping("/libraryController")
     public ResponseEntity<String> appB(){
 
-        final String uri = "http://localhost:8082/securtyController";
+        final String uri = "http://secutiry-service:8082/securtyController";
 
         RestTemplate template = new RestTemplate();
        // String result =  restTemplate.getForObject(uri, ResponseEntity.class).toString();
