@@ -1,21 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1o4h66b" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.4.0">
-  <bpmn:process id="Process_01lb7it" isExecutable="true">
+  <bpmn:process id="registration_process" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_16z8k6u</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_16z8k6u" sourceRef="StartEvent_1" targetRef="Activity_12f3l0j" />
-    <bpmn:userTask id="Activity_12f3l0j" name="unos podataka">
+    <bpmn:userTask id="Activity_12f3l0j" name="unos podatakar">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="username" label="username" type="string">
-            <camunda:validation>
-              <camunda:constraint name="required" />
-              <camunda:constraint name="minlength" config="3" />
-            </camunda:validation>
+          <camunda:formField id="name" label="Name" type="string" />
+          <camunda:formField id="surname" label="Surname" type="string" />
+          <camunda:formField id="email" label="Email" type="string" />
+          <camunda:formField id="city" label="City" type="string" />
+          <camunda:formField id="country" label="Country" type="string" />
+          <camunda:formField id="username" label="Username" type="string" />
+          <camunda:formField id="password" label="Password" type="string" />
+          <camunda:formField id="genre" label="Genre" type="enum">
+            <camunda:value id="fiction" name="Fiction" />
+            <camunda:value id="mystery" name="Mystery" />
+            <camunda:value id="thriller" name="Thiller" />
+            <camunda:value id="romance" name="Romance" />
           </camunda:formField>
-          <camunda:formField id="password" label="password" type="string" />
-          <camunda:formField id="flag" type="boolean" />
+          <camunda:formField id="betaReader" label="Beta Reader" type="boolean" />
+          <camunda:formField id="genreBeta" label="Genre for beta readers" type="enum">
+            <camunda:value id="fiction" name="Fiction" />
+            <camunda:value id="mystery" name="Mystery" />
+            <camunda:value id="thriller" name="Thriller" />
+            <camunda:value id="romance" name="Romance" />
+          </camunda:formField>
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_16z8k6u</bpmn:incoming>
@@ -27,14 +39,14 @@
     </bpmn:endEvent>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_01lb7it">
-      <bpmndi:BPMNEdge id="Flow_16z8k6u_di" bpmnElement="Flow_16z8k6u">
-        <di:waypoint x="215" y="117" />
-        <di:waypoint x="290" y="117" />
-      </bpmndi:BPMNEdge>
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="registration_process">
       <bpmndi:BPMNEdge id="Flow_1d6et0u_di" bpmnElement="Flow_1d6et0u">
         <di:waypoint x="390" y="117" />
         <di:waypoint x="682" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_16z8k6u_di" bpmnElement="Flow_16z8k6u">
+        <di:waypoint x="215" y="117" />
+        <di:waypoint x="290" y="117" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="179" y="99" width="36" height="36" />
