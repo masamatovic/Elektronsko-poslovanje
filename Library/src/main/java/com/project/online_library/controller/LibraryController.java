@@ -20,8 +20,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import dto.FormFieldsDto;
-import dto.FormSubmissionDto;
+import com.project.online_library.dto.FormFieldsDto;
+import com.project.online_library.dto.FormSubmissionDto;
 
 @CrossOrigin
 @RestController
@@ -95,7 +95,7 @@ public class LibraryController {
 	{
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		for(FormSubmissionDto temp : list){
-			map.put(temp.getFieldId(), temp.getFieldValue());
+			map.put(temp.getId(), temp.getFieldValue());
 		}
 		
 		return map;

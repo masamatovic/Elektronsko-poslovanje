@@ -1,10 +1,10 @@
-package dto;
+package com.project.online_library.dto;
 
 import java.io.Serializable;
 
 public class FormSubmissionDto implements Serializable{
 	
-	String fieldId;
+	String id;
 	String fieldValue;
 	
 	
@@ -15,16 +15,16 @@ public class FormSubmissionDto implements Serializable{
 
 	public FormSubmissionDto(String fieldId, String fieldValue) {
 		super();
-		this.fieldId = fieldId;
+		this.id = fieldId;
 		this.fieldValue = fieldValue;
 	}
 
-	public String getFieldId() {
-		return fieldId;
+	public String getId() {
+		return id;
 	}
 
-	public void setFieldId(String fieldId) {
-		this.fieldId = fieldId;
+	public void setId(String fieldId) {
+		this.id = fieldId;
 	}
 
 	public String getFieldValue() {
@@ -34,6 +34,8 @@ public class FormSubmissionDto implements Serializable{
 	public void setFieldValue(String fieldValue) {
 		this.fieldValue = fieldValue;
 	}
+
+
 	
 	
 }
