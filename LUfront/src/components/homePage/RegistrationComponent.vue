@@ -22,28 +22,27 @@
                 <v-text-field
                   :label = "field.id"
                   v-if="field.type.name=='string'"
-                  
+                  v-model="field.fieldValue"
                 ></v-text-field>
                 <v-checkbox
                   :label = "field.id"
                   v-if="field.type.name=='boolean'"
-                  v-model="betaReader"
+                  v-model="field.fieldValue"
                 ></v-checkbox>
                 <v-combobox
                   v-if="field.id=='genre'"
-                  
                   :items="genreValues"
                   :label="field.label"
-                  multiple
+                  v-model="field.fieldValue"     
                   outlined
                   dense
                 ></v-combobox>
                 <v-combobox
-                  v-if="field.id=='genreBeta' && betaReader"
-                  
+                  v-if="field.id=='genreBeta'"
+                  v-model="field.fieldValue"
                   :items="genreValuesBeta"
                   :label="field.label"
-                  multiple
+                  
                   outlined
                   dense
                 ></v-combobox>
@@ -154,7 +153,7 @@ export default {
       if (this.$refs.form.validate()) {
         console.log(this.user.name);
         Axios
-        .post("http://localhost:8080/register/" + this.taskId, this.field)
+        .post("http://localhost:8080/register/" + this.taskId, this.formFields)
         .then(response => {
             console.log(response)
           })  
