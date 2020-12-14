@@ -19,7 +19,7 @@ public class SecurityController {
     @GetMapping("/securtyController")
     public ResponseEntity<String> appB(){
 
-        final String uri = "http://localhost:8083/cardController";
+        final String uri = "http://card-payment:8083/cardController";
 
         RestTemplate template = new RestTemplate();
         // String result =  restTemplate.getForObject(uri, ResponseEntity.class).toString();
