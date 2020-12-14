@@ -1,7 +1,8 @@
-package com.project.online_library.Controller;
+package com.project.online_library.controller;
 
 
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.camunda.bpm.engine.FormService;
@@ -19,7 +20,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import com.project.online_library.model.FormFieldsDto;
+import dto.FormFieldsDto;
+import dto.FormSubmissionDto;
 
 @CrossOrigin
 @RestController
@@ -43,7 +45,7 @@ public class LibraryController {
     public @ResponseBody FormFieldsDto get() {
 		//provera da li korisnik sa id-jem pera postoji
 		//List<User> users = identityService.createUserQuery().userId("pera").list();
-		ProcessInstance pi = runtimeService.startProcessInstanceByKey("Process_01lb7it");
+		ProcessInstance pi = runtimeService.startProcessInstanceByKey("registration_process");
 
 		Task task = taskService.createTaskQuery().processInstanceId(pi.getId()).list().get(0);
 		
@@ -67,5 +69,35 @@ public class LibraryController {
         return entity;
     }
 
-
+	@PostMapping(path = "/register/{taskId}", produces = "application/json")
+    public @ResponseBody ResponseEntity post(@RequestBody List<FormSubmissionDto> dto, @PathVariable String taskId) {
+		HashMap<String, Object> map = this.mapListToDto(dto);
+		
+		    // list all running/unsuspended instances of the process
+//		    ProcessInstance processInstance =
+//		        runtimeService.createProcessInstanceQuery()
+//		            .processDefinitionKey("Process_1")
+//		            .active() // we only want the unsuspended process instances
+//		            .list().get(0);
+		
+//			Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).list().get(0);
+		
+		
+		
+		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+		String processInstanceId = task.getProcessInstanceId();
+		runtimeService.setVariable(processInstanceId, "registration", dto);
+		formService.submitTaskForm(taskId, map);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+	
+	private HashMap<String, Object> mapListToDto(List<FormSubmissionDto> list)
+	{
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		for(FormSubmissionDto temp : list){
+			map.put(temp.getFieldId(), temp.getFieldValue());
+		}
+		
+		return map;
+	}
 }

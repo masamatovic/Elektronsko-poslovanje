@@ -2,7 +2,7 @@
   <v-row justify="center">
     <v-dialog v-model="RegisterDialog" max-width="600px">
       <template v-slot:activator="{ on }">
-        <v-btn text color="primary" v-on="on">
+        <v-btn text color="primary" v-on="on" @click="loadRegistrationForm()">
           <span>Register</span>
           <RegistrationIcon></RegistrationIcon>
         </v-btn>
@@ -21,7 +21,32 @@
               <div v-for="field in formFields" :key="field.id"> 
                 <v-text-field
                   :label = "field.id"
+                  v-if="field.type.name=='string'"
+                  
                 ></v-text-field>
+                <v-checkbox
+                  :label = "field.id"
+                  v-if="field.type.name=='boolean'"
+                  v-model="betaReader"
+                ></v-checkbox>
+                <v-combobox
+                  v-if="field.id=='genre'"
+                  
+                  :items="genreValues"
+                  :label="field.label"
+                  multiple
+                  outlined
+                  dense
+                ></v-combobox>
+                <v-combobox
+                  v-if="field.id=='genreBeta' && betaReader"
+                  
+                  :items="genreValuesBeta"
+                  :label="field.label"
+                  multiple
+                  outlined
+                  dense
+                ></v-combobox>
               </div>
             <!--  <v-text-field
                 class="mt-n2"
@@ -100,14 +125,7 @@ export default {
   },
   data: () => ({
     RegisterDialog: false,
-    user: {
-      name: "",
-      surname: "",
-      number: "",
-      adrress: "",
-      email: "",
-      password: ""
-    },
+    user: {},
     confirmation: "",
     requiredRules: [v => !!v || "This field is required"],
     passwordRules: [
@@ -119,7 +137,11 @@ export default {
       v => /.+@.+\..+/.test(v) || "E-mail must be valid"
     ],
     formFields: [],
-    processInstance:{},
+    taskId:{},
+    genreValues: [],
+    selectedGenreValues: [],
+    betaReader: false,
+    field: {},
   }),
   computed: {
     passwordConfirmationRule() {
@@ -131,6 +153,14 @@ export default {
     register() {
       if (this.$refs.form.validate()) {
         console.log(this.user.name);
+        Axios
+        .post("http://localhost:8080/register/" + this.taskId, this.field)
+        .then(response => {
+            console.log(response)
+          })  
+        .catch(error => {
+            console.log(error)
+          })        
         this.close();
       } else {
         console.log("nije validno");
@@ -140,20 +170,30 @@ export default {
       this.RegisterDialog = false;
       this.$refs.form.reset();
     },
-    generateRegistrationForm(){
+    loadRegistrationForm(){
       Axios
       .get("http://localhost:8080/registrationForm")
       .then(response => {
           this.formFields = response.data.formFields;
-          this.processInstance = response.data.processInstanceId;
+          this.user =  response.data.formFields;
+          this.taskId = response.data.taskId;
+          this.formFields.forEach(formField => {
+            if(formField.id=='genre'){
+              this.genreValues = Object.keys(formField.type.values)
+            }
+            if(formField.id=='genreBeta'){
+              this.genreValuesBeta = Object.keys(formField.type.values)
+            }
+          });
         })  
       .catch(error => {
           console.log(error)
         })
-    }
+    },
+
   },
   mounted(){
-    this.generateRegistrationForm()
+    
   }
 };
 </script>

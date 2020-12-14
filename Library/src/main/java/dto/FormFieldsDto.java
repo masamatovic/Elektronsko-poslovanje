@@ -1,4 +1,4 @@
-package com.project.online_library.model;
+package dto;
 
 import java.util.List;
 
