@@ -1,6 +1,14 @@
 package com.project.online_library.service;
 
 import com.project.online_library.dto.FormSubmissionDto;
+//import com.project.online_library.model.BetaReader;
+import com.project.online_library.model.BetaReader;
+import com.project.online_library.model.Reader;
+import com.project.online_library.model.Writer;
+//import com.project.online_library.repository.BetaReaderRepository;
+import com.project.online_library.repository.BetaReaderRepository;
+import com.project.online_library.repository.ReaderRepository;
+import com.project.online_library.repository.WriterRepository;
 import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
@@ -17,6 +25,12 @@ public class RegistrationService implements JavaDelegate {
     @Autowired
     IdentityService identityService;
 
+    @Autowired
+    ReaderRepository readerRepository;
+
+    @Autowired
+    BetaReaderRepository betaReaderRepository;
+
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
 
@@ -30,9 +44,33 @@ public class RegistrationService implements JavaDelegate {
             if(formField.getId().equals("password")) {
                 user.setPassword(formField.getFieldValue());
             }
+            if(formField.getId().equals("betaReader")) {
+                saveUserToDb(registration, formField.getFieldValue());
+            }
         }
         identityService.saveUser(user);
 
-        saveUserToDb(registration);
+    }
+
+    public void saveUserToDb(List<FormSubmissionDto> registration, String isBetaReader){
+
+        if(isBetaReader.equals("true")){
+            saveBetaReader(registration);
+        }else{
+            saveReader(registration);
+        }
+    }
+
+    public void saveBetaReader(List<FormSubmissionDto> registration){
+
+        BetaReader betaReader = new BetaReader(registration.get(0).getFieldValue(), registration.get(1).getFieldValue(), registration.get(2).getFieldValue(), registration.get(6).getFieldValue(), registration.get(5).getFieldValue(), registration.get(3).getFieldValue(), registration.get(4).getFieldValue());
+        betaReaderRepository.save(betaReader);
+    }
+
+    public void saveReader(List<FormSubmissionDto> registration){
+
+        Reader reader = new Reader(registration.get(0).getFieldValue(), registration.get(1).getFieldValue(), registration.get(2).getFieldValue(), registration.get(6).getFieldValue(), registration.get(5).getFieldValue(), registration.get(3).getFieldValue(), registration.get(4).getFieldValue());
+        readerRepository.save(reader);
+
     }
 }
