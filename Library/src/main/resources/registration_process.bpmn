@@ -10,7 +10,7 @@
         <camunda:formData>
           <camunda:formField id="name" label="Name" type="string" />
           <camunda:formField id="surname" label="Surname" type="string" />
-          <camunda:formField id="email" label="Email" type="string" />
+          <camunda:formField id="email" label="Email" type="string" defaultValue="a" />
           <camunda:formField id="city" label="City" type="string" />
           <camunda:formField id="country" label="Country" type="string" />
           <camunda:formField id="username" label="Username" type="string" />
