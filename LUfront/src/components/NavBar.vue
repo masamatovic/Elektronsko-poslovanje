@@ -1,6 +1,6 @@
 <template>
   <nav>
-  <!-- snackbar -->
+    <!-- snackbar -->
     <v-snackbar v-model="snackbarSuccess" :timeout="4000" top color="success">
       <span>{{ snackbarSuccessText }}</span>
       <v-btn text @click="snackbarSuccess = false">Close</v-btn>
@@ -11,11 +11,8 @@
       <v-btn text @click="snackbarDanger = false">Close</v-btn>
     </v-snackbar>
 
-  <!-- gornji toolbar -->
-  <v-toolbar flat class="mx-12">
-      <v-toolbar-title>
-        <span color="orange-text">BOLNICA</span>
-      </v-toolbar-title>
+    <!-- gornji toolbar -->
+    <v-toolbar flat class="mx-12">
       <v-spacer></v-spacer>
       <div class="mx-2">
         <LoginComponent
@@ -39,10 +36,22 @@
             snackbarDanger = true;
             snackbarDangerText = 'Can not register.';
           "
-        />     
+        />
+      </div>
+      <div class="mx-2">
+        <WriterRegistrationComponent
+          @registered="
+            snackbarSuccess = true;
+            snackbarSuccessText = 'You are registered! Please login.';
+          "
+          @notRegistered="
+            snackbarDanger = true;
+            snackbarDangerText = 'Can not register.';
+          "
+        />
       </div>
       <div>
-          <Proba/>
+        <Proba />
       </div>
     </v-toolbar>
   </nav>
@@ -51,19 +60,22 @@
 <script>
 import LoginComponent from "@/components/homePage/LoginComponent.vue";
 import RegistrationComponent from "@/components/homePage/RegistrationComponent.vue";
+import WriterRegistrationComponent from "@/components/homePage/WriterRegistrationComponent.vue";
 import Proba from "@/components/Proba.vue";
 export default {
   components: {
-      LoginComponent, RegistrationComponent, Proba
+    LoginComponent,
+    RegistrationComponent,
+    Proba,
+    WriterRegistrationComponent,
   },
-data() {
+  data() {
     return {
       snackbarSuccess: false,
       snackbarSuccessText: "",
       snackbarDanger: false,
       snackbarDangerText: "",
     };
- },
-}
-
+  },
+};
 </script>
