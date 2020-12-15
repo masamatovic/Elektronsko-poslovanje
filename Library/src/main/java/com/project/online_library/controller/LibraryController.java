@@ -20,8 +20,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import dto.FormFieldsDto;
-import dto.FormSubmissionDto;
+import com.project.online_library.dto.FormFieldsDto;
+import com.project.online_library.dto.FormSubmissionDto;
 
 @CrossOrigin
 @RestController

@@ -1,4 +1,4 @@
-package dto;
+package com.project.online_library.dto;
 
 import java.io.Serializable;
 
