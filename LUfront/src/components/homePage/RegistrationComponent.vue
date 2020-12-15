@@ -28,21 +28,21 @@
                   :label = "field.id"
                   v-if="field.type.name=='boolean'"
                   v-model="field.fieldValue"
+                  @change="changeGenreBetaVisibility()"
                 ></v-checkbox>
                 <v-combobox
                   v-if="field.id=='genre'"
-                  :items="genreValues"
+                  :items="Object.keys(field.type.values)"
                   :label="field.label"
-                  v-model="field.fieldValue"     
+                  v-model="field.fieldValue"
                   outlined
                   dense
                 ></v-combobox>
                 <v-combobox
-                  v-if="field.id=='genreBeta'"
-                  v-model="field.fieldValue"
-                  :items="genreValuesBeta"
+                  v-if="field.id=='genreBeta' && betaReader==true"
+                  :items="Object.keys(field.type.values)"
                   :label="field.label"
-                  
+                  v-model="field.fieldValue"
                   outlined
                   dense
                 ></v-combobox>
@@ -151,9 +151,12 @@ export default {
   methods: {
     register() {
       if (this.$refs.form.validate()) {
-        console.log(this.user.name);
+        let formSubmissionDto = new Array();
+        this.formFields.forEach(formField => {
+          formSubmissionDto.push({id : formField.id, fieldValue : formField.fieldValue})
+        });
         Axios
-        .post("http://localhost:8080/register/" + this.taskId, this.formFields)
+        .post("http://localhost:8080/register/" + this.taskId, formSubmissionDto)
         .then(response => {
             console.log(response)
           })  
@@ -174,21 +177,15 @@ export default {
       .get("http://localhost:8080/registrationForm")
       .then(response => {
           this.formFields = response.data.formFields;
-          this.user =  response.data.formFields;
           this.taskId = response.data.taskId;
-          this.formFields.forEach(formField => {
-            if(formField.id=='genre'){
-              this.genreValues = Object.keys(formField.type.values)
-            }
-            if(formField.id=='genreBeta'){
-              this.genreValuesBeta = Object.keys(formField.type.values)
-            }
-          });
         })  
       .catch(error => {
           console.log(error)
         })
     },
+    changeGenreBetaVisibility(){
+      this.betaReader = !this.betaReader
+    }
 
   },
   mounted(){

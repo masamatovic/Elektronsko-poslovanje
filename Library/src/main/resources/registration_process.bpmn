@@ -5,12 +5,12 @@
       <bpmn:outgoing>Flow_16z8k6u</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_16z8k6u" sourceRef="StartEvent_1" targetRef="Activity_12f3l0j" />
-    <bpmn:userTask id="Activity_12f3l0j" name="unos podatakar">
+    <bpmn:userTask id="Activity_12f3l0j" name="unos podataka">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="name" label="Name" type="string" />
           <camunda:formField id="surname" label="Surname" type="string" />
-          <camunda:formField id="email" label="Email" type="string" defaultValue="a" />
+          <camunda:formField id="email" label="Email" type="string" />
           <camunda:formField id="city" label="City" type="string" />
           <camunda:formField id="country" label="Country" type="string" />
           <camunda:formField id="username" label="Username" type="string" />
@@ -42,7 +42,7 @@
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="registration_process">
       <bpmndi:BPMNEdge id="Flow_1d6et0u_di" bpmnElement="Flow_1d6et0u">
         <di:waypoint x="390" y="117" />
-        <di:waypoint x="682" y="117" />
+        <di:waypoint x="832" y="117" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_16z8k6u_di" bpmnElement="Flow_16z8k6u">
         <di:waypoint x="215" y="117" />
@@ -55,7 +55,7 @@
         <dc:Bounds x="290" y="77" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_00gwgt7_di" bpmnElement="Event_00gwgt7">
-        <dc:Bounds x="682" y="99" width="36" height="36" />
+        <dc:Bounds x="832" y="99" width="36" height="36" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
