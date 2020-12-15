@@ -95,6 +95,8 @@ public class LibraryController {
 	{
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		for(FormSubmissionDto temp : list){
+			System.out.println(temp.getId());
+			System.out.println(temp.getFieldValue());
 			map.put(temp.getId(), temp.getFieldValue());
 		}
 		
