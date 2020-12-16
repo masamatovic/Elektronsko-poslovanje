@@ -22,9 +22,11 @@ public class CustomerService {
     @Autowired
     EmailService emailService;
 
+
+
     public Customer  save (Customer customer){ return customerRepository.save(customer);}
 
-    public Customer register (Customer customer){
+ /* public Customer register (Customer customer){
         Customer newCustomer = new Customer();
         newCustomer.setEmail(customer.getEmail());
         newCustomer.setPassword(customer.getPassword());
@@ -36,17 +38,17 @@ public class CustomerService {
         saved.ifPresent( u -> {
             try {
                 String token = UUID.randomUUID().toString();
-                verificationTokenService.save(saved.get(), token);
+               verificationTokenService.save(saved.get(), token);
 
                 // salanje  verifikacionog mejla
-                emailService.sendEmail(u);
+               emailService.sendEmail(u);
             }catch (Exception e){
                 e.printStackTrace();
             }
         });
 
         return saved.get();
-    }
+    }*/
 
 
 

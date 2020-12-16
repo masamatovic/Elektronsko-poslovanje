@@ -34,28 +34,52 @@
       <bpmn:outgoing>Flow_18l52gt</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="Flow_18l52gt" sourceRef="Activity_12f3l0j" targetRef="CreateUser" />
-    <bpmn:endEvent id="Event_16bhlbi">
-      <bpmn:incoming>Flow_1r4axcp</bpmn:incoming>
-    </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_1r4axcp" sourceRef="CreateUser" targetRef="Event_16bhlbi" />
+    <bpmn:sequenceFlow id="Flow_1r4axcp" sourceRef="CreateUser" targetRef="SendEmail" />
     <bpmn:serviceTask id="CreateUser" name="Create User" camunda:class="com.project.online_library.service.RegistrationService">
       <bpmn:incoming>Flow_18l52gt</bpmn:incoming>
       <bpmn:outgoing>Flow_1r4axcp</bpmn:outgoing>
     </bpmn:serviceTask>
+    <bpmn:serviceTask id="SendEmail" name="Send Email" camunda:class="com.project.online_library.service.VerificationTokenService">
+      <bpmn:incoming>Flow_1r4axcp</bpmn:incoming>
+      <bpmn:outgoing>Flow_0t0k4v2</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0t0k4v2" sourceRef="SendEmail" targetRef="TokenForm" />
+    <bpmn:userTask id="TokenForm" name="Token Form">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="token" label="Your Token" type="string" />
+        </camunda:formData>
+        <camunda:taskListener delegateExpression="${tokenTaskHendler}" event="create" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0t0k4v2</bpmn:incoming>
+      <bpmn:outgoing>Flow_1puq0my</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="Event_0kpdc73">
+      <bpmn:incoming>Flow_1puq0my</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1puq0my" sourceRef="TokenForm" targetRef="Event_0kpdc73" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="registration_process">
+      <bpmndi:BPMNEdge id="Flow_1r4axcp_di" bpmnElement="Flow_1r4axcp">
+        <di:waypoint x="560" y="117" />
+        <di:waypoint x="620" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_18l52gt_di" bpmnElement="Flow_18l52gt">
+        <di:waypoint x="390" y="117" />
+        <di:waypoint x="460" y="117" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_16z8k6u_di" bpmnElement="Flow_16z8k6u">
         <di:waypoint x="215" y="117" />
         <di:waypoint x="290" y="117" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_18l52gt_di" bpmnElement="Flow_18l52gt">
-        <di:waypoint x="390" y="117" />
-        <di:waypoint x="470" y="117" />
+      <bpmndi:BPMNEdge id="Flow_0t0k4v2_di" bpmnElement="Flow_0t0k4v2">
+        <di:waypoint x="720" y="117" />
+        <di:waypoint x="780" y="117" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1r4axcp_di" bpmnElement="Flow_1r4axcp">
-        <di:waypoint x="570" y="117" />
-        <di:waypoint x="652" y="117" />
+      <bpmndi:BPMNEdge id="Flow_1puq0my_di" bpmnElement="Flow_1puq0my">
+        <di:waypoint x="880" y="117" />
+        <di:waypoint x="942" y="117" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="179" y="99" width="36" height="36" />
@@ -63,11 +87,17 @@
       <bpmndi:BPMNShape id="Activity_17hgiy0_di" bpmnElement="Activity_12f3l0j">
         <dc:Bounds x="290" y="77" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_16bhlbi_di" bpmnElement="Event_16bhlbi">
-        <dc:Bounds x="652" y="99" width="36" height="36" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1ywcmtb_di" bpmnElement="CreateUser">
-        <dc:Bounds x="470" y="77" width="100" height="80" />
+        <dc:Bounds x="460" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_13wym08_di" bpmnElement="SendEmail">
+        <dc:Bounds x="620" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0tdut3j_di" bpmnElement="TokenForm">
+        <dc:Bounds x="780" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0kpdc73_di" bpmnElement="Event_0kpdc73">
+        <dc:Bounds x="942" y="99" width="36" height="36" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

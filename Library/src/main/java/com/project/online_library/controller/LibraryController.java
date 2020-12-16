@@ -48,7 +48,6 @@ public class LibraryController {
 		ProcessInstance pi = runtimeService.startProcessInstanceByKey("registration_process");
 
 		Task task = taskService.createTaskQuery().processInstanceId(pi.getId()).list().get(0);
-		
 		TaskFormData tfd = formService.getTaskFormData(task.getId());
 		List<FormField> properties = tfd.getFormFields();
 		for(FormField fp : properties) {
@@ -81,9 +80,7 @@ public class LibraryController {
 //		            .list().get(0);
 		
 //			Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).list().get(0);
-		
-		
-		
+
 		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
 		String processInstanceId = task.getProcessInstanceId();
 		runtimeService.setVariable(processInstanceId, "registration", dto);
