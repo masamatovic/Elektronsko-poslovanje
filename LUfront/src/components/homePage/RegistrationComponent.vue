@@ -25,21 +25,24 @@
                   :label="field.id"
                   v-if="field.type.name == 'string'"
                   v-model="field.fieldValue"
+                  :rules="rules(field)"
                 ></v-text-field>
-
                 <v-checkbox
                   :label="field.id"
                   v-if="field.type.name == 'boolean'"
                   v-model="field.fieldValue"
                   @change="changeGenreBetaVisibility()"
+                  :rules="rules(field)"
                 ></v-checkbox>
                 <v-combobox
                   v-if="field.id == 'genre'"
-                  :items="Object.keys(field.type.values)"
+                  :items="Object.values(field.type.values)"
                   :label="field.label"
                   v-model="field.fieldValue"
                   outlined
                   dense
+                  :rules="rules(field)"
+                  
                 ></v-combobox>
                 <v-combobox
                   v-if="field.id == 'genreBeta' && betaReader == true"
@@ -48,62 +51,9 @@
                   v-model="field.fieldValue"
                   outlined
                   dense
+                  :rules="rules(field)"
                 ></v-combobox>
               </div>
-              <!--  <v-text-field
-                class="mt-n2"
-                label="Name*"
-                color="primary"
-                v-model="user.name"
-                required
-                :rules="requiredRules"
-              ></v-text-field>
-              <v-text-field
-                label="Surname*"
-                color="primary"
-                v-model="user.surname"
-                required
-                :rules="requiredRules"
-              ></v-text-field>
-              <v-text-field
-                label="Phone number*"
-                color="primary"
-                v-model="user.number"
-                required
-                :rules="requiredRules"
-              ></v-text-field>
-              <v-text-field
-                label="Address*"
-                color="primary"
-                v-model="user.address"
-                required
-                :rules="requiredRules"
-              ></v-text-field>
-              <v-text-field
-                label="Email*"
-                color="primary"
-                v-model="user.email"
-                required
-                :rules="emailRules"
-              ></v-text-field>
-
-              <v-text-field
-                color="primary"
-                label="Password*"
-                v-model="user.password"
-                type="password"
-                required
-                :rules="requiredRules"
-              ></v-text-field>
-              <v-text-field
-                color="primary"
-                label="Confirm password*"
-                v-model="confirmation"
-                type="password"
-                required
-                :rules="[passwordConfirmationRule]"
-              ></v-text-field>
-              -->
             </v-form>
           </v-container>
         </v-card-text>
@@ -129,28 +79,15 @@ export default {
   data: () => ({
     RegisterDialog: false,
     user: {},
-    confirmation: "",
-    requiredRules: [(v) => !!v || "This field is required"],
-    passwordRules: [
-      (v) => !!v || "This is required",
-      (v) => v == this.confirmation || "Passwords do not match",
-    ],
-    emailRules: [
-      (v) => !!v || "This field is required",
-      (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
-    ],
     formFields: [],
     taskId: {},
-    genreValues: [],
-    selectedGenreValues: [],
     betaReader: false,
     field: {},
+    validationConstraints: [
+      {configuration: ""}
+    ],
   }),
   computed: {
-    passwordConfirmationRule() {
-      return () =>
-        this.user.password === this.confirmation || "Password must match";
-    },
   },
   methods: {
     register() {
@@ -162,35 +99,32 @@ export default {
             fieldValue: formField.fieldValue,
           });
         });
-        Axios.post(
-          "http://localhost:8080/register/" + this.taskId,
-          formSubmissionDto
-        )
+        Axios.post("http://localhost:8080/register/" + this.taskId, formSubmissionDto)
           .then((response) => {
-            this.$emit("registered");
             console.log(response);
           })
           .catch((error) => {
-            this.$emit("notRegistered");
             console.log(error);
           });
         this.close();
+        
       } else {
         console.log("nije validno");
       }
     },
     close() {
+      this.$refs.form.resetValidation();
       this.RegisterDialog = false;
-      this.$refs.form.reset();
     },
     loadRegistrationForm() {
+      this.formFields.length = 0;
       Axios.get("http://localhost:8080/registrationForm")
         .then((response) => {
           this.formFields = response.data.formFields;
-          //this.$store.state.processID
-          this.$store.commit("addProcessID", response.data.processInstanceId);
-          console.log(this.$store.state.processID);
           this.taskId = response.data.taskId;
+          this.formFields.forEach(element => {
+            element.fieldValue = element.defaultValue
+          });
         })
         .catch((error) => {
           console.log(error);
@@ -199,6 +133,27 @@ export default {
     changeGenreBetaVisibility() {
       this.betaReader = !this.betaReader;
     },
+    rules(field){
+      const rules = []
+        field.validationConstraints.forEach(constraint => {
+          if (constraint.name == 'required') {
+            const rule = (v) => !!v || "This field is required"
+            rules.push(rule)
+          }
+          if (constraint.name == 'minlength') {
+            const rule = v => (v || '').length >= constraint.configuration ||
+                    `A minimum of ${constraint.configuration} characters is required`
+            rules.push(rule)
+          }
+          if (constraint.name == 'maxlength') {
+            const rule = v => (v || '').length <= constraint.configuration ||
+                    `A maximum of ${constraint.configuration} characters is allowed`
+            rules.push(rule)
+          }
+          
+        });
+      return rules;
+    }
   },
   mounted() {},
 };
