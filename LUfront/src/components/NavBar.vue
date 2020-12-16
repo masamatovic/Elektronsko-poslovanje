@@ -41,9 +41,7 @@
           "
         />     
       </div>
-      <div>
-          <Proba/>
-      </div>
+
     </v-toolbar>
   </nav>
 </template>
@@ -51,10 +49,9 @@
 <script>
 import LoginComponent from "@/components/homePage/LoginComponent.vue";
 import RegistrationComponent from "@/components/homePage/RegistrationComponent.vue";
-import Proba from "@/components/Proba.vue";
 export default {
   components: {
-      LoginComponent, RegistrationComponent, Proba
+      LoginComponent, RegistrationComponent
   },
 data() {
     return {
