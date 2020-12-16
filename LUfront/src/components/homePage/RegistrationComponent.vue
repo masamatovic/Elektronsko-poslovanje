@@ -185,6 +185,9 @@ export default {
       Axios.get("http://localhost:8080/registrationForm")
         .then((response) => {
           this.formFields = response.data.formFields;
+          //this.$store.state.processID
+          this.$store.commit("addProcessID", response.data.processInstanceId);
+          console.log(this.$store.state.processID );
           this.taskId = response.data.taskId;
         })
         .catch((error) => {

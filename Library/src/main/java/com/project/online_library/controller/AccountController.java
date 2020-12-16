@@ -7,6 +7,7 @@ import com.project.online_library.model.Customer;
 import com.project.online_library.model.Users;
 import com.project.online_library.model.VerificationToken;
 import com.project.online_library.service.CustomerService;
+import com.project.online_library.service.RegistrationService;
 import com.project.online_library.service.VerificationTokenService;
 import org.camunda.bpm.engine.FormService;
 import org.camunda.bpm.engine.RuntimeService;
@@ -21,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.spi.RegisterableService;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -29,29 +31,17 @@ import java.util.List;
 public class AccountController {
 
     @Autowired
-    CustomerService customerService;
+    RegistrationService registrationService;
     @Autowired
     VerificationTokenService verificationTokenService;
     @Autowired
-    private RuntimeService runtimeService;
+    RuntimeService runtimeService;
     @Autowired
     TaskService taskService;
-    @Autowired
-    FormService formService;
-    @Autowired
-    TokenTaskHendler tokenTaskHendler;
 
-    @GetMapping(path = "/activationForm", produces = "application/json")
-    public @ResponseBody
-    ResponseEntity getCamundasForm() {
 
-        tokenTaskHendler.notify();
-
-        return new ResponseEntity<>(TokenTaskHendler.formFieldsDto, HttpStatus.OK);
-    }
-
-    @PostMapping(path="/activation/{token}")
-    public ResponseEntity activation (@PathVariable String token){
+    @PostMapping(path="/activation/{token}/{processID}")
+    public ResponseEntity activation (@PathVariable String token, @PathVariable String processID ){
 
         VerificationToken verificationToken = verificationTokenService.findByToken(token);
         if (verificationToken == null){
@@ -65,15 +55,16 @@ public class AccountController {
                 if (verificationToken.getExpiryDate().before(currentTimestamp)){
                     return new ResponseEntity<>("Your verification token has expired", HttpStatus.NOT_FOUND);
                 } else{
-                    user.setEnabled(true);
-                //    customerService.save(user);
+                    registrationService.activateUser(user);
+                    runtimeService.setVariable(processID, "verification", "true");
+                    Task task = taskService.createTaskQuery().processInstanceId(processID).list().get(0);
+                    taskService.complete(task.getId());
                     return new ResponseEntity<>(user, HttpStatus.OK);
                 }
             } else {
                 return new ResponseEntity<>("Your account is already activated", HttpStatus.ALREADY_REPORTED);
             }
         }
-        //return new ResponseEntity<>(customer, HttpStatus.OK);
     }
 
 }

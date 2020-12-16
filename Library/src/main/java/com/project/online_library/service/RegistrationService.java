@@ -4,10 +4,12 @@ import com.project.online_library.dto.FormSubmissionDto;
 //import com.project.online_library.model.BetaReader;
 import com.project.online_library.model.BetaReader;
 import com.project.online_library.model.Reader;
+import com.project.online_library.model.Users;
 import com.project.online_library.model.Writer;
 //import com.project.online_library.repository.BetaReaderRepository;
 import com.project.online_library.repository.BetaReaderRepository;
 import com.project.online_library.repository.ReaderRepository;
+import com.project.online_library.repository.UserRepository;
 import com.project.online_library.repository.WriterRepository;
 import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
@@ -30,6 +32,9 @@ public class RegistrationService implements JavaDelegate {
 
     @Autowired
     BetaReaderRepository betaReaderRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
@@ -70,6 +75,12 @@ public class RegistrationService implements JavaDelegate {
 
         Reader reader = new Reader(registration.get(0).getFieldValue(), registration.get(1).getFieldValue(), registration.get(2).getFieldValue(), registration.get(6).getFieldValue(), registration.get(5).getFieldValue(), registration.get(3).getFieldValue(), registration.get(4).getFieldValue(), false);
         readerRepository.save(reader);
+
+    }
+
+    public void activateUser (Users user){
+        user.setEnabled(true);
+        userRepository.save(user);
 
     }
 }
