@@ -12,7 +12,7 @@ public class Users {
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="users_id_seq")
     private Long id;
 
-    public Users(String firstName, String lastName, String email, String password, String username, String city, String country) {
+    public Users(String firstName, String lastName, String email, String password, String username, String city, String country, boolean enabled) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -20,6 +20,7 @@ public class Users {
         this.username = username;
         this.city = city;
         this.country = country;
+        this.enabled = enabled;
     }
 
     @Column
@@ -42,6 +43,9 @@ public class Users {
 
     @Column
     private String country;
+
+    @Column
+    private boolean enabled;
 
     public Users() {
 
@@ -109,5 +113,13 @@ public class Users {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }

@@ -13,7 +13,7 @@ const routes = [
     component: HomePage
   },
     {
-    path: "/activation/:token",
+    path: "/activationForm",
     name: "ActivationLink",
     component: ActivationLink,
   },

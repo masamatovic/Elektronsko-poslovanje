@@ -49,7 +49,6 @@ public class RegistrationService implements JavaDelegate {
             }
         }
         identityService.saveUser(user);
-
     }
 
     public void saveUserToDb(List<FormSubmissionDto> registration, String isBetaReader){
@@ -63,13 +62,13 @@ public class RegistrationService implements JavaDelegate {
 
     public void saveBetaReader(List<FormSubmissionDto> registration){
 
-        BetaReader betaReader = new BetaReader(registration.get(0).getFieldValue(), registration.get(1).getFieldValue(), registration.get(2).getFieldValue(), registration.get(6).getFieldValue(), registration.get(5).getFieldValue(), registration.get(3).getFieldValue(), registration.get(4).getFieldValue());
+        BetaReader betaReader = new BetaReader(registration.get(0).getFieldValue(), registration.get(1).getFieldValue(), registration.get(2).getFieldValue(), registration.get(6).getFieldValue(), registration.get(5).getFieldValue(), registration.get(3).getFieldValue(), registration.get(4).getFieldValue(), false);
         betaReaderRepository.save(betaReader);
     }
 
     public void saveReader(List<FormSubmissionDto> registration){
 
-        Reader reader = new Reader(registration.get(0).getFieldValue(), registration.get(1).getFieldValue(), registration.get(2).getFieldValue(), registration.get(6).getFieldValue(), registration.get(5).getFieldValue(), registration.get(3).getFieldValue(), registration.get(4).getFieldValue());
+        Reader reader = new Reader(registration.get(0).getFieldValue(), registration.get(1).getFieldValue(), registration.get(2).getFieldValue(), registration.get(6).getFieldValue(), registration.get(5).getFieldValue(), registration.get(3).getFieldValue(), registration.get(4).getFieldValue(), false);
         readerRepository.save(reader);
 
     }

@@ -1,6 +1,7 @@
 package com.project.online_library.service;
 
 import com.project.online_library.model.Customer;
+import com.project.online_library.model.Users;
 import com.project.online_library.model.VerificationToken;
 import com.project.online_library.repository.VerificationTokenRepository;
 import org.springframework.core.env.Environment;
@@ -24,19 +25,21 @@ public class EmailService {
     VerificationTokenRepository verificationTokenRepository;
 
     @Async
-    public void sendEmail(Customer customer) throws MailException, InterruptedException {
+    public void sendEmail(Users user) throws MailException, InterruptedException {
 
-        VerificationToken verificationToken = verificationTokenRepository.findByCustomer(customer);
+        VerificationToken verificationToken = verificationTokenRepository.findByUser(user);
 
         if (verificationToken != null){
             String token = verificationToken.getToken();
             SimpleMailMessage email = new SimpleMailMessage();
-            email.setTo(customer.getEmail());
+            email.setTo(user.getEmail());
             email.setFrom(environment.getProperty("spring.mail.username"));
             email.setSubject("Potvrda registracije");
-            email.setText("Dobrodošli " + customer.getEmail() +
-                    ",\n\n Da biste potvrdili vašu email adresu molimo Vas da pristupite linku:\n\n" +
-                    "http://localhost:8081/activation/"+ token +
+            email.setText("Dobrodošli " + user.getFirstName() +
+                    ",\n\n Vaš token je: " + token +
+                    "\n\n Da biste potvrdili vašu email adresu molimo Vas unesete priloženi token na sledećem linku:\n\n" +
+                    "http://localhost:8081/activationForm" +
+                    "\n\n Vaš token ističe u roku od 24h.\n\n" +
                     "\n\nHvala Vam na ukazanom poverenju!\n\n\n\n" );
             javaMailSender.send(email);
         }

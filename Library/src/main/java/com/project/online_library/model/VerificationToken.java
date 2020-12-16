@@ -21,15 +21,15 @@ public class VerificationToken {
     @Column
     private Timestamp expiryDate;
 
-    @OneToOne(targetEntity = Customer.class, fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false, name = "customer_id")
-    private Customer customer;
+    @OneToOne(targetEntity = Users.class, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false, name = "users_id_seq")
+    private Users user;
 
 
     public VerificationToken() {}
 
-    public VerificationToken(Customer customer, String token) {
-        this.customer = customer;
+    public VerificationToken(Users user, String token) {
+        this.user = user;
         this.token = token;
     }
 
@@ -56,20 +56,20 @@ public class VerificationToken {
         this.token = token;
     }
 
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
     public Date getExpiryDate() {
         return expiryDate;
     }
 
     public void setExpiryDate(Timestamp expiryDate) {
         this.expiryDate = expiryDate;
+    }
+
+    public Users getUser() {
+        return user;
+    }
+
+    public void setUser(Users user) {
+        this.user = user;
     }
 
     // standard constructors, getters and setters
