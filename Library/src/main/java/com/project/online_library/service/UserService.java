@@ -41,6 +41,15 @@ public class UserService implements JavaDelegate {
             if(formField.getId().equals("username")) {
                 user.setId(formField.getFieldValue());
             }
+            if(formField.getId().equals("name")) {
+                user.setFirstName(formField.getFieldValue());
+            }
+            if(formField.getId().equals("surname")) {
+                user.setLastName(formField.getFieldValue());
+            }
+            if(formField.getId().equals("email")) {
+                user.setEmail(formField.getFieldValue());
+            }
             if(formField.getId().equals("password")) {
                 user.setPassword(formField.getFieldValue());
             }
