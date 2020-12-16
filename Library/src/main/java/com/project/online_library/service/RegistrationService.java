@@ -36,6 +36,7 @@ public class RegistrationService implements JavaDelegate {
     @Autowired
     UserRepository userRepository;
 
+
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
 
