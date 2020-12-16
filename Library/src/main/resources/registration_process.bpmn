@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1o4h66b" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.4.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1o4h66b" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.4.0">
   <bpmn:process id="registration_process" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_16z8k6u</bpmn:outgoing>
@@ -8,57 +8,20 @@
     <bpmn:userTask id="Activity_12f3l0j" name="unos podataka">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="name" label="Name" type="string">
-            <camunda:validation>
-              <camunda:constraint name="maxlength" config="10" />
-              <camunda:constraint name="minlength" config="3" />
-              <camunda:constraint name="required" />
-            </camunda:validation>
+          <camunda:formField id="name" label="Name" type="string" />
+          <camunda:formField id="surname" label="Surname" type="string" />
+          <camunda:formField id="email" label="Email" type="string" />
+          <camunda:formField id="city" label="City" type="string" />
+          <camunda:formField id="country" label="Country" type="string" />
+          <camunda:formField id="username" label="Username" type="string" />
+          <camunda:formField id="password" label="Password" type="string" />
+          <camunda:formField id="genre" label="Genre" type="enum">
+            <camunda:value id="fiction" name="Fiction" />
+            <camunda:value id="mystery" name="Mystery" />
+            <camunda:value id="thriller" name="Thiller" />
+            <camunda:value id="romance" name="Romance" />
           </camunda:formField>
-          <camunda:formField id="surname" label="Surname" type="string">
-            <camunda:validation>
-              <camunda:constraint name="maxlength" config="10" />
-              <camunda:constraint name="minlength" config="3" />
-              <camunda:constraint name="required" />
-            </camunda:validation>
-          </camunda:formField>
-          <camunda:formField id="email" label="Email" type="string">
-            <camunda:validation>
-              <camunda:constraint name="maxlength" config="20" />
-              <camunda:constraint name="minlength" config="6" />
-              <camunda:constraint name="required" />
-            </camunda:validation>
-          </camunda:formField>
-          <camunda:formField id="city" label="City" type="string">
-            <camunda:validation>
-              <camunda:constraint name="maxlength" config="15" />
-            </camunda:validation>
-          </camunda:formField>
-          <camunda:formField id="country" label="Country" type="string">
-            <camunda:validation>
-              <camunda:constraint name="maxlength" config="15" />
-            </camunda:validation>
-          </camunda:formField>
-          <camunda:formField id="username" label="Username" type="string">
-            <camunda:validation>
-              <camunda:constraint name="maxlength" config="10" />
-              <camunda:constraint name="minlength" config="6" />
-              <camunda:constraint name="required" />
-            </camunda:validation>
-          </camunda:formField>
-          <camunda:formField id="password" label="Password" type="string">
-            <camunda:validation>
-              <camunda:constraint name="maxlength" config="10" />
-              <camunda:constraint name="minlength" config="6" />
-              <camunda:constraint name="required" />
-            </camunda:validation>
-          </camunda:formField>
-          <camunda:formField id="genre" label="Genre" type="genre-multiselect">
-            <camunda:validation>
-              <camunda:constraint name="required" />
-            </camunda:validation>
-          </camunda:formField>
-          <camunda:formField id="betaReader" label="Beta Reader" type="boolean" defaultValue="false" />
+          <camunda:formField id="betaReader" label="Beta Reader" type="boolean" />
           <camunda:formField id="genreBeta" label="Genre for beta readers" type="enum">
             <camunda:value id="fiction" name="Fiction" />
             <camunda:value id="mystery" name="Mystery" />
@@ -66,34 +29,80 @@
             <camunda:value id="romance" name="Romance" />
           </camunda:formField>
         </camunda:formData>
-        <camunda:taskListener delegateExpression="${genreListener}" event="create" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_16z8k6u</bpmn:incoming>
       <bpmn:outgoing>Flow_18l52gt</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="Flow_18l52gt" sourceRef="Activity_12f3l0j" targetRef="CreateUser" />
-    <bpmn:endEvent id="Event_16bhlbi">
-      <bpmn:incoming>Flow_1r4axcp</bpmn:incoming>
-    </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_1r4axcp" sourceRef="CreateUser" targetRef="Event_16bhlbi" />
+    <bpmn:sequenceFlow id="Flow_1r4axcp" sourceRef="CreateUser" targetRef="SendEmail" />
     <bpmn:serviceTask id="CreateUser" name="Create User" camunda:class="com.project.online_library.service.RegistrationService">
       <bpmn:incoming>Flow_18l52gt</bpmn:incoming>
       <bpmn:outgoing>Flow_1r4axcp</bpmn:outgoing>
     </bpmn:serviceTask>
+    <bpmn:serviceTask id="SendEmail" name="Send Email" camunda:class="com.project.online_library.service.VerificationTokenService">
+      <bpmn:incoming>Flow_1r4axcp</bpmn:incoming>
+      <bpmn:outgoing>Flow_0t0k4v2</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0t0k4v2" sourceRef="SendEmail" targetRef="Verification" />
+    <bpmn:endEvent id="Event_0kpdc73">
+      <bpmn:incoming>Flow_11e9yb0</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1a83tw6" sourceRef="Verification" targetRef="SaveUser" />
+    <bpmn:userTask id="Verification" name="Verification">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="verification" label="verification" type="boolean" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0t0k4v2</bpmn:incoming>
+      <bpmn:outgoing>Flow_1a83tw6</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_11e9yb0" sourceRef="SaveUser" targetRef="Event_0kpdc73" />
+    <bpmn:serviceTask id="SaveUser" name="Save User" camunda:class="com.project.online_library.service.UserService">
+      <bpmn:incoming>Flow_1a83tw6</bpmn:incoming>
+      <bpmn:outgoing>Flow_11e9yb0</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:boundaryEvent id="Event_1nwoml0" attachedToRef="Verification">
+      <bpmn:outgoing>Flow_0lgpplv</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_1l89e4i">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT24H</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:boundaryEvent>
+    <bpmn:sequenceFlow id="Flow_0lgpplv" sourceRef="Event_1nwoml0" targetRef="Event_1gnf29c" />
+    <bpmn:endEvent id="Event_1gnf29c">
+      <bpmn:incoming>Flow_0lgpplv</bpmn:incoming>
+    </bpmn:endEvent>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="registration_process">
+      <bpmndi:BPMNEdge id="Flow_11e9yb0_di" bpmnElement="Flow_11e9yb0">
+        <di:waypoint x="1130" y="117" />
+        <di:waypoint x="1212" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1a83tw6_di" bpmnElement="Flow_1a83tw6">
+        <di:waypoint x="920" y="117" />
+        <di:waypoint x="1030" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0t0k4v2_di" bpmnElement="Flow_0t0k4v2">
+        <di:waypoint x="730" y="117" />
+        <di:waypoint x="820" y="117" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1r4axcp_di" bpmnElement="Flow_1r4axcp">
-        <di:waypoint x="570" y="117" />
-        <di:waypoint x="652" y="117" />
+        <di:waypoint x="560" y="117" />
+        <di:waypoint x="630" y="117" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_18l52gt_di" bpmnElement="Flow_18l52gt">
         <di:waypoint x="390" y="117" />
-        <di:waypoint x="470" y="117" />
+        <di:waypoint x="460" y="117" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_16z8k6u_di" bpmnElement="Flow_16z8k6u">
         <di:waypoint x="215" y="117" />
         <di:waypoint x="290" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0lgpplv_di" bpmnElement="Flow_0lgpplv">
+        <di:waypoint x="890" y="175" />
+        <di:waypoint x="890" y="240" />
+        <di:waypoint x="1112" y="240" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="179" y="99" width="36" height="36" />
@@ -101,11 +110,26 @@
       <bpmndi:BPMNShape id="Activity_17hgiy0_di" bpmnElement="Activity_12f3l0j">
         <dc:Bounds x="290" y="77" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_16bhlbi_di" bpmnElement="Event_16bhlbi">
-        <dc:Bounds x="652" y="99" width="36" height="36" />
+      <bpmndi:BPMNShape id="Event_0kpdc73_di" bpmnElement="Event_0kpdc73">
+        <dc:Bounds x="1212" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1wndjfi_di" bpmnElement="SaveUser">
+        <dc:Bounds x="1030" y="77" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1ywcmtb_di" bpmnElement="CreateUser">
-        <dc:Bounds x="470" y="77" width="100" height="80" />
+        <dc:Bounds x="460" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_13wym08_di" bpmnElement="SendEmail">
+        <dc:Bounds x="630" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_05rd7jh_di" bpmnElement="Verification">
+        <dc:Bounds x="820" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1gnf29c_di" bpmnElement="Event_1gnf29c">
+        <dc:Bounds x="1112" y="222" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0rmdcvp_di" bpmnElement="Event_1nwoml0">
+        <dc:Bounds x="872" y="139" width="36" height="36" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
