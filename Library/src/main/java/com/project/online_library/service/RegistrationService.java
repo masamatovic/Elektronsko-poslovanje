@@ -41,19 +41,13 @@ public class RegistrationService implements JavaDelegate {
 
         List<FormSubmissionDto> registration = (List<FormSubmissionDto>)delegateExecution.getVariable("registration");
         System.out.println(registration);
-        User user = identityService.newUser("");
+
         for (FormSubmissionDto formField : registration) {
-            if(formField.getId().equals("username")) {
-                user.setId(formField.getFieldValue());
-            }
-            if(formField.getId().equals("password")) {
-                user.setPassword(formField.getFieldValue());
-            }
+
             if(formField.getId().equals("betaReader")) {
                 saveUserToDb(registration, formField.getFieldValue());
             }
         }
-        identityService.saveUser(user);
     }
 
     public void saveUserToDb(List<FormSubmissionDto> registration, String isBetaReader){

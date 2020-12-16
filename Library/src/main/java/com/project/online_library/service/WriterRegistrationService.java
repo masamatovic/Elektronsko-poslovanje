@@ -51,25 +51,13 @@ public class WriterRegistrationService implements JavaDelegate {
 
         List<FormSubmissionDto> writerRegistration = (List<FormSubmissionDto>)delegateExecution.getVariable("writerRegistration");
         System.out.println(writerRegistration);
-        User user = identityService.newUser("");
-        for (FormSubmissionDto formField : writerRegistration) {
-            if(formField.getId().equals("username")) {
-                user.setId(formField.getFieldValue());
-            }
-            if(formField.getId().equals("password")) {
-                user.setPassword(formField.getFieldValue());
-            }
-
-        }
-
         saveUserToDb(writerRegistration);
-        identityService.saveUser(user);
 
     }
 
     public void saveUserToDb(List<FormSubmissionDto> registration){
 
-        Writer writer = new Writer(registration.get(0).getFieldValue(), registration.get(1).getFieldValue(), registration.get(2).getFieldValue(), registration.get(6).getFieldValue(), registration.get(5).getFieldValue(), registration.get(3).getFieldValue(), registration.get(4).getFieldValue());
+        Writer writer = new Writer(registration.get(0).getFieldValue(), registration.get(1).getFieldValue(), registration.get(2).getFieldValue(), registration.get(6).getFieldValue(), registration.get(5).getFieldValue(), registration.get(3).getFieldValue(), registration.get(4).getFieldValue(), false);
         writerRepository.save(writer);
     }
 
