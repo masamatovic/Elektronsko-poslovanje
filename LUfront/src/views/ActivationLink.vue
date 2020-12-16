@@ -8,6 +8,9 @@
               >Activate your account</span
             >
             <v-spacer></v-spacer>
+            <v-btn icon color="primary" @click="RegisterDialog = false">
+              <CloseIcon></CloseIcon>
+            </v-btn>
           </v-card-title>
           <v-card-text>
             <v-container>
