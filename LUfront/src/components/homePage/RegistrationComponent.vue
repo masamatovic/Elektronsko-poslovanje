@@ -167,9 +167,11 @@ export default {
           formSubmissionDto
         )
           .then((response) => {
+            this.$emit("registered");
             console.log(response);
           })
           .catch((error) => {
+            this.$emit("notRegistered");
             console.log(error);
           });
         this.close();
@@ -187,7 +189,7 @@ export default {
           this.formFields = response.data.formFields;
           //this.$store.state.processID
           this.$store.commit("addProcessID", response.data.processInstanceId);
-          console.log(this.$store.state.processID );
+          console.log(this.$store.state.processID);
           this.taskId = response.data.taskId;
         })
         .catch((error) => {

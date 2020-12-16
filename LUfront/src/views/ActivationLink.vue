@@ -1,6 +1,17 @@
 <template>
   <v-row justify="center">
     <v-dialog v-model="ActivationDialog" max-width="600px">
+      <!-- snackbar -->
+      <v-snackbar v-model="snackbarSuccess" :timeout="4000" top color="success">
+        <span>{{ snackbarSuccessText }}</span>
+        <v-btn text @click="snackbarSuccess = false">Close</v-btn>
+      </v-snackbar>
+
+      <v-snackbar v-model="snackbarDanger" :timeout="4000" top color="danger">
+        <span>{{ snackbarDangerText }}</span>
+        <v-btn text @click="snackbarDanger = false">Close</v-btn>
+      </v-snackbar>
+
       <div class="detailsBorderColor">
         <v-card>
           <v-card-title>
@@ -8,7 +19,7 @@
               >Activate your account</span
             >
             <v-spacer></v-spacer>
-            <v-btn icon color="primary" @click="RegisterDialog = false">
+            <v-btn icon color="primary" @click="ActivationDialog = false">
               <CloseIcon></CloseIcon>
             </v-btn>
           </v-card-title>
@@ -39,6 +50,10 @@ export default {
   },
   data() {
     return {
+      snackbarSuccess: false,
+      snackbarSuccessText: "",
+      snackbarDanger: false,
+      snackbarDangerText: "",
       token: "",
       ActivationDialog: true,
       formFields: [],
