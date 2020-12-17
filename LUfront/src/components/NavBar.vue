@@ -38,18 +38,6 @@
           "
         />
       </div>
-      <div class="mx-2">
-        <WriterRegistrationComponent
-          @registered="
-            snackbarSuccess = true;
-            snackbarSuccessText = 'You are registered! Please login.';
-          "
-          @notRegistered="
-            snackbarDanger = true;
-            snackbarDangerText = 'Can not register.';
-          "
-        />
-      </div>
     </v-toolbar>
   </nav>
 </template>
@@ -57,12 +45,10 @@
 <script>
 import LoginComponent from "@/components/homePage/LoginComponent.vue";
 import RegistrationComponent from "@/components/homePage/RegistrationComponent.vue";
-import WriterRegistrationComponent from "@/components/homePage/WriterRegistrationComponent.vue";
 export default {
   components: {
     LoginComponent,
-    RegistrationComponent,
-    WriterRegistrationComponent,
+    RegistrationComponent
   },
   data() {
     return {

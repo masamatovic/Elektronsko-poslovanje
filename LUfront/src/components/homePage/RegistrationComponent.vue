@@ -25,14 +25,18 @@
                   :label="field.id"
                   v-if="field.type.name == 'string'"
                   v-model="field.fieldValue"
+                  :rules="rules(field)"
                 ></v-text-field>
-
-                <v-checkbox
-                  :label="field.id"
-                  v-if="field.type.name == 'boolean'"
+                <v-combobox
+                  v-if="field.id == 'userType'"
+                  :items="Object.keys(field.type.values)"
+                  :label="field.label"
                   v-model="field.fieldValue"
-                  @change="changeGenreBetaVisibility()"
-                ></v-checkbox>
+                  @change="changeGenreBetaVisibility(field.fieldValue)"
+                  outlined
+                  dense
+                  :rules="rules(field)"
+                ></v-combobox>
                 <v-combobox
                   v-if="field.id == 'genre'"
                   :items="Object.keys(field.type.values)"
@@ -40,70 +44,18 @@
                   v-model="field.fieldValue"
                   outlined
                   dense
+                  :rules="rules(field)"
                 ></v-combobox>
                 <v-combobox
-                  v-if="field.id == 'genreBeta' && betaReader == true"
+                  v-if="field.id == 'genreBeta' && userType =='beta-reader'"
                   :items="Object.keys(field.type.values)"
                   :label="field.label"
                   v-model="field.fieldValue"
                   outlined
                   dense
+                  :rules="rules(field)"
                 ></v-combobox>
               </div>
-              <!--  <v-text-field
-                class="mt-n2"
-                label="Name*"
-                color="primary"
-                v-model="user.name"
-                required
-                :rules="requiredRules"
-              ></v-text-field>
-              <v-text-field
-                label="Surname*"
-                color="primary"
-                v-model="user.surname"
-                required
-                :rules="requiredRules"
-              ></v-text-field>
-              <v-text-field
-                label="Phone number*"
-                color="primary"
-                v-model="user.number"
-                required
-                :rules="requiredRules"
-              ></v-text-field>
-              <v-text-field
-                label="Address*"
-                color="primary"
-                v-model="user.address"
-                required
-                :rules="requiredRules"
-              ></v-text-field>
-              <v-text-field
-                label="Email*"
-                color="primary"
-                v-model="user.email"
-                required
-                :rules="emailRules"
-              ></v-text-field>
-
-              <v-text-field
-                color="primary"
-                label="Password*"
-                v-model="user.password"
-                type="password"
-                required
-                :rules="requiredRules"
-              ></v-text-field>
-              <v-text-field
-                color="primary"
-                label="Confirm password*"
-                v-model="confirmation"
-                type="password"
-                required
-                :rules="[passwordConfirmationRule]"
-              ></v-text-field>
-              -->
             </v-form>
           </v-container>
         </v-card-text>
@@ -145,6 +97,7 @@ export default {
     selectedGenreValues: [],
     betaReader: false,
     field: {},
+    userType: ""
   }),
   computed: {
     passwordConfirmationRule() {
@@ -153,6 +106,30 @@ export default {
     },
   },
   methods: {
+    changeGenreBetaVisibility(userType) {
+      this.userType = userType;
+    },
+    rules(field){
+      const rules = []
+        field.validationConstraints.forEach(constraint => {
+          if (constraint.name == 'required') {
+            const rule = (v) => !!v || "This field is required"
+            rules.push(rule)
+          }
+          if (constraint.name == 'minlength') {
+            const rule = v => (v || '').length >= constraint.configuration ||
+                    `A minimum of ${constraint.configuration} characters is required`
+            rules.push(rule)
+          }
+          if (constraint.name == 'maxlength') {
+            const rule = v => (v || '').length <= constraint.configuration ||
+                    `A maximum of ${constraint.configuration} characters is allowed`
+            rules.push(rule)
+          }
+         
+        });
+      return rules;
+    },
     register() {
       if (this.$refs.form.validate()) {
         let formSubmissionDto = new Array();
@@ -193,9 +170,6 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-    },
-    changeGenreBetaVisibility() {
-      this.betaReader = !this.betaReader;
     },
   },
   mounted() {},
