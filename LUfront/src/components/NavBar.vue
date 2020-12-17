@@ -30,7 +30,7 @@
         <RegistrationComponent
           @registered="
             snackbarSuccess = true;
-            snackbarSuccessText = 'You are registered! Please login.';
+            snackbarSuccessText = 'We have sent you a verification email!';
           "
           @notRegistered="
             snackbarDanger = true;

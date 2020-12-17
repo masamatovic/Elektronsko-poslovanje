@@ -39,7 +39,7 @@
                 ></v-combobox>
                 <v-combobox
                   v-if="field.id == 'genre'"
-                  :items="Object.keys(field.type.values)"
+                  :items="Object.values(field.type.values)"
                   :label="field.label"
                   v-model="field.fieldValue"
                   outlined
@@ -81,29 +81,13 @@ export default {
   data: () => ({
     RegisterDialog: false,
     user: {},
-    confirmation: "",
-    requiredRules: [(v) => !!v || "This field is required"],
-    passwordRules: [
-      (v) => !!v || "This is required",
-      (v) => v == this.confirmation || "Passwords do not match",
-    ],
-    emailRules: [
-      (v) => !!v || "This field is required",
-      (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
-    ],
     formFields: [],
     taskId: {},
-    genreValues: [],
-    selectedGenreValues: [],
     betaReader: false,
     field: {},
     userType: ""
   }),
   computed: {
-    passwordConfirmationRule() {
-      return () =>
-        this.user.password === this.confirmation || "Password must match";
-    },
   },
   methods: {
     changeGenreBetaVisibility(userType) {
@@ -139,10 +123,7 @@ export default {
             fieldValue: formField.fieldValue,
           });
         });
-        Axios.post(
-          "http://localhost:8080/register/" + this.taskId,
-          formSubmissionDto
-        )
+        Axios.post("http://localhost:8080/register/" + this.taskId, formSubmissionDto)
           .then((response) => {
             console.log(response);
           })
@@ -150,22 +131,24 @@ export default {
             console.log(error);
           });
         this.close();
+        
       } else {
         console.log("nije validno");
       }
     },
     close() {
+      this.$refs.form.resetValidation();
       this.RegisterDialog = false;
-      this.$refs.form.reset();
     },
     loadRegistrationForm() {
+      this.formFields.length = 0;
       Axios.get("http://localhost:8080/registrationForm")
         .then((response) => {
           this.formFields = response.data.formFields;
-          //this.$store.state.processID
-          this.$store.commit("addProcessID", response.data.processInstanceId);
-          console.log(this.$store.state.processID );
           this.taskId = response.data.taskId;
+          this.formFields.forEach(element => {
+            element.fieldValue = element.defaultValue
+          });
         })
         .catch((error) => {
           console.log(error);

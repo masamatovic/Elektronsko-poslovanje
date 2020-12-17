@@ -7,6 +7,7 @@ import com.project.online_library.repository.VerificationTokenRepository;
 import org.springframework.core.env.Environment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
+import org.springframework.mail.MailSendException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
@@ -25,11 +26,12 @@ public class EmailService {
     VerificationTokenRepository verificationTokenRepository;
 
     @Async
-    public void sendEmail(Users user) throws MailException, InterruptedException {
+    public void sendEmail(Users user) throws MailException, MailSendException, InterruptedException {
 
         VerificationToken verificationToken = verificationTokenRepository.findByUser(user);
 
-        if (verificationToken != null){
+
+        if (verificationToken != null) {
             String token = verificationToken.getToken();
             SimpleMailMessage email = new SimpleMailMessage();
             email.setTo(user.getEmail());
@@ -43,5 +45,4 @@ public class EmailService {
             javaMailSender.send(email);
         }
     }
-
 }
