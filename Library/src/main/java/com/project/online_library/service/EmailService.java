@@ -38,16 +38,11 @@ public class EmailService {
             email.setFrom(environment.getProperty("spring.mail.username"));
             email.setSubject("Potvrda registracije");
             email.setText("Dobrodošli " + user.getFirstName() +
-                    ",\n\n Vaš token je: " + token +
-                    "\n\n Da biste potvrdili vašu email adresu molimo Vas unesete priloženi token na sledećem linku:\n\n" +
+                    ",\n\n Da biste potvrdili vašu email adresu molimo Vas da pristupite sledećem linku:\n\n" +
                     "http://localhost:8081/activationForm/" + token +
-                    "\n\n Vaš token ističe u roku od 24h.\n\n" +
-                    "\n\nHvala Vam na ukazanom poverenju!\n\n\n\n");
-            try {
-                javaMailSender.send(email);
-            } catch (MailSendException e) {
-                e.printStackTrace();
-            }
+                    "\n\n Nalog možete potvrditi u naredna 24h\n\n" +
+                    "\n\nHvala Vam na ukazanom poverenju!\n\n\n\n" );
+            javaMailSender.send(email);
         }
     }
 }

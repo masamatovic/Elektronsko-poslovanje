@@ -1,30 +1,19 @@
 package com.project.online_library.controller;
 
 
-import com.project.online_library.camundaHendlers.TokenTaskHendler;
-import com.project.online_library.dto.FormFieldsDto;
-import com.project.online_library.model.Customer;
 import com.project.online_library.model.Users;
 import com.project.online_library.model.VerificationToken;
-import com.project.online_library.service.CustomerService;
 import com.project.online_library.service.RegistrationService;
 import com.project.online_library.service.VerificationTokenService;
-import org.camunda.bpm.engine.FormService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
-import org.camunda.bpm.engine.form.FormField;
-import org.camunda.bpm.engine.form.TaskFormData;
-import org.camunda.bpm.engine.identity.User;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.imageio.spi.RegisterableService;
 import java.sql.Timestamp;
-import java.util.List;
 
 @CrossOrigin
 @RestController

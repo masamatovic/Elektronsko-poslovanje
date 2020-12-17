@@ -1,5 +1,16 @@
 <template>
   <v-row justify="center">
+    <!-- snackbar -->
+    <v-snackbar v-model="snackbarSuccess" :timeout="4000" top color="success">
+      <span>{{ snackbarSuccessText }}</span>
+      <v-btn text @click="snackbarSuccess = false">Close</v-btn>
+    </v-snackbar>
+
+    <v-snackbar v-model="snackbarDanger" :timeout="4000" top color="danger">
+      <span>{{ snackbarDangerText }}</span>
+      <v-btn text @click="snackbarDanger = false">Close</v-btn>
+    </v-snackbar>
+
     <v-dialog v-model="ActivationDialog" max-width="600px">
       <!-- snackbar -->
       <v-snackbar v-model="snackbarSuccess" :timeout="4000" top color="success">
@@ -75,11 +86,16 @@ export default {
         )
         .then((response) => {
           console.log(response.data);
+          this.snackbarSuccessText = "You have successfully registrated!";
+          this.close();
         })
-        .catch((error) => {
-          this.poruka = "Doslo je do greske prilikom aktivacije vaseg naloga";
+        .catch((error)=>{
           console.log(error);
-        });
+          this.snackbarDanger = true;
+          this.snackbarDangerText =
+            "Something went wrong. You are not registered.";
+          this.close();
+        })      
     },
     close() {
       this.ActivationDialog = false;

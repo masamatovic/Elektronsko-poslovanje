@@ -36,6 +36,9 @@ public class RegistrationService implements JavaDelegate {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    WriterRepository writerRepository;
+
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
 
@@ -44,18 +47,20 @@ public class RegistrationService implements JavaDelegate {
 
         for (FormSubmissionDto formField : registration) {
 
-            if(formField.getId().equals("betaReader")) {
+            if(formField.getId().equals("userType")) {
                 saveUserToDb(registration, formField.getFieldValue());
             }
         }
     }
 
-    public void saveUserToDb(List<FormSubmissionDto> registration, String isBetaReader){
+    public void saveUserToDb(List<FormSubmissionDto> registration, String userType){
 
-        if(isBetaReader.equals("true")){
+        if(userType.equals("beta-reader")){
             saveBetaReader(registration);
-        }else{
+        }else if(userType.equals("reader")){
             saveReader(registration);
+        }else{
+            saveWriter(registration);
         }
     }
 
@@ -70,6 +75,12 @@ public class RegistrationService implements JavaDelegate {
         Reader reader = new Reader(registration.get(0).getFieldValue(), registration.get(1).getFieldValue(), registration.get(2).getFieldValue(), registration.get(6).getFieldValue(), registration.get(5).getFieldValue(), registration.get(3).getFieldValue(), registration.get(4).getFieldValue(), false);
         readerRepository.save(reader);
 
+    }
+
+    public void saveWriter(List<FormSubmissionDto> registration){
+
+        Writer writer = new Writer(registration.get(0).getFieldValue(), registration.get(1).getFieldValue(), registration.get(2).getFieldValue(), registration.get(6).getFieldValue(), registration.get(5).getFieldValue(), registration.get(3).getFieldValue(), registration.get(4).getFieldValue(), false);
+        writerRepository.save(writer);
     }
 
     public void activateUser (Users user){

@@ -7,13 +7,22 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   plugins: [createPersistedState()],
   state: {
-    processID : ""
+    processID: "",
+    user: {
+      username: ""
+    }
   },
   mutations: {
-      addProcessID(state, procesID) {
-      // mutate state
+    addProcessID(state, procesID) {
       state.processID = procesID;
     },
+    login(state, user) {
+      state.user.username = user.username;
+    },
+    logout(state) {
+      state.user = {}
+    },
+    
   },
   actions: {
   },

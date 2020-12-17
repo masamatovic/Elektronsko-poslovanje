@@ -27,13 +27,16 @@
                   v-model="field.fieldValue"
                   :rules="rules(field)"
                 ></v-text-field>
-                <v-checkbox
-                  :label="field.id"
-                  v-if="field.type.name == 'boolean'"
+                <v-combobox
+                  v-if="field.id == 'userType'"
+                  :items="Object.keys(field.type.values)"
+                  :label="field.label"
                   v-model="field.fieldValue"
-                  @change="changeGenreBetaVisibility()"
+                  @change="changeGenreBetaVisibility(field.fieldValue)"
+                  outlined
+                  dense
                   :rules="rules(field)"
-                ></v-checkbox>
+                ></v-combobox>
                 <v-combobox
                   v-if="field.id == 'genre'"
                   :items="Object.values(field.type.values)"
@@ -42,10 +45,9 @@
                   outlined
                   dense
                   :rules="rules(field)"
-                  
                 ></v-combobox>
                 <v-combobox
-                  v-if="field.id == 'genreBeta' && betaReader == true"
+                  v-if="field.id == 'genreBeta' && userType =='beta-reader'"
                   :items="Object.keys(field.type.values)"
                   :label="field.label"
                   v-model="field.fieldValue"
@@ -83,13 +85,35 @@ export default {
     taskId: {},
     betaReader: false,
     field: {},
-    validationConstraints: [
-      {configuration: ""}
-    ],
+    userType: ""
   }),
   computed: {
   },
   methods: {
+    changeGenreBetaVisibility(userType) {
+      this.userType = userType;
+    },
+    rules(field){
+      const rules = []
+        field.validationConstraints.forEach(constraint => {
+          if (constraint.name == 'required') {
+            const rule = (v) => !!v || "This field is required"
+            rules.push(rule)
+          }
+          if (constraint.name == 'minlength') {
+            const rule = v => (v || '').length >= constraint.configuration ||
+                    `A minimum of ${constraint.configuration} characters is required`
+            rules.push(rule)
+          }
+          if (constraint.name == 'maxlength') {
+            const rule = v => (v || '').length <= constraint.configuration ||
+                    `A maximum of ${constraint.configuration} characters is allowed`
+            rules.push(rule)
+          }
+         
+        });
+      return rules;
+    },
     register() {
       if (this.$refs.form.validate()) {
         let formSubmissionDto = new Array();
@@ -130,30 +154,6 @@ export default {
           console.log(error);
         });
     },
-    changeGenreBetaVisibility() {
-      this.betaReader = !this.betaReader;
-    },
-    rules(field){
-      const rules = []
-        field.validationConstraints.forEach(constraint => {
-          if (constraint.name == 'required') {
-            const rule = (v) => !!v || "This field is required"
-            rules.push(rule)
-          }
-          if (constraint.name == 'minlength') {
-            const rule = v => (v || '').length >= constraint.configuration ||
-                    `A minimum of ${constraint.configuration} characters is required`
-            rules.push(rule)
-          }
-          if (constraint.name == 'maxlength') {
-            const rule = v => (v || '').length <= constraint.configuration ||
-                    `A maximum of ${constraint.configuration} characters is allowed`
-            rules.push(rule)
-          }
-          
-        });
-      return rules;
-    }
   },
   mounted() {},
 };

@@ -22,17 +22,16 @@
             <v-container>
               <v-form ref="form">
                 <v-text-field
-                  label="Email*"
+                  label="Username*"
                   color="primary"
-                  v-model="email"
+                  v-model="user.username"
                   required
-                  :rules="emailRules"
                 ></v-text-field>
 
                 <v-text-field
                   color="primary"
                   label="Password*"
-                  v-model="password"
+                  v-model="user.password"
                   type="password"
                   required
                   :rules="passwordRules"
@@ -62,36 +61,28 @@ export default {
   },
   data: () => ({
     LoginDialog: false,
-    password: "",
     passwordRules: [(v) => !!v || "Password is required"],
-    email: "",
-    emailRules: [
-      (v) => !!v || "E-mail is required",
-      (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
-    ],
+    user : {
+       username: '',
+       password: '',
+    }
   }),
   methods: {
     login() {
-      if (this.$refs.form.validate()) {
-        console.log(this.password + " " + this.email);
-
-        axios
-          .get("/weatherforecast")
-          .then(() => {})
-          .catch((error) => {
-            console.log(error);
+     axios
+          .post("http://localhost:8080/login", this.user)
+          .then((response) => {
+              //localStorage.setItem("jwt", response.data.accessToken);
+              this.$store.commit( 'login', response.data);
+              console.log("ulogovala si se:");  
+              console.log(this.$store.state.user);  
+              this.close();
+                    
+          })
+          .catch(error => {
+              console.log(this.user)
+              console.log(error);
           });
-
-        if (this.email == "mc@gmail.com") {
-          this.$emit("loggedIn");
-        } else {
-          this.$emit("notLoggedIn");
-        }
-
-        this.close();
-      } else {
-        console.log("nije validno");
-      }
     },
     close() {
       this.LoginDialog = false;
